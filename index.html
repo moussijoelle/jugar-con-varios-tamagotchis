@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digipets — Tamagotchi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap"
+    rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+  </script>
+
+  <style type="text/tailwindcss">
+    @import "tailwindcss";
+
+    @theme {
+      --font-sans: "Inclusive Sans", ui-sans-serif, system-ui, sans-serif;
+      --color-brand: #ff4500;
+      --color-foto-blanco: #f6f6f6;
+    }
+
+    @layer base {
+      body {
+        @apply min-h-screen bg-slate-950 bg-cover bg-center bg-no-repeat text-white;
+        background-image: url("assets/img/bg.vacio.jpg");
+      }
+
+      p {
+        @apply mb-2 leading-relaxed text-white;
+      }
+
+      h1, h2, h3 {
+        @apply mb-2 font-serif font-bold text-white;
+      }
+    }
+
+    @layer components {
+      .btn {
+        @apply inline-flex cursor-pointer items-center justify-center rounded-lg border-4 border-double border-white text-xs font-semibold shadow transition-colors outline-none;
+      }
+
+      .btn-xs {
+        @apply min-h-8 px-2 py-1;
+      }
+
+      @media (min-width: 640px) {
+        .sm\:btn-sm {
+          @apply min-h-9 px-3 py-1.5 text-sm;
+        }
+      }
+
+      .panel-foto {
+        @apply bg-foto-blanco p-4 sm:p-5;
+      }
+
+      .foto-intro {
+        background-image: url("assets/img/ensenar.webp");
+        @apply bg-contain bg-center bg-no-repeat;
+      }
+
+      .panel-intro {
+        @apply bg-slate-800 p-4 sm:p-5;
+      }
+
+      .pie-proyecto {
+        @apply rounded-xl border border-slate-600/60 bg-slate-900/70 px-4 py-3 text-center text-sm text-white shadow-lg backdrop-blur-sm;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header class="p-3 text-center">
+    <h1 class="mb-0 text-lg font-bold sm:text-xl md:text-2xl">
+      🐾 BIENVENIDO AL MARAVILLOSO MUNDO DE TUS <span class="text-sky-400">DIGIPETS</span> 🐾
+    </h1>
+  </header>
+
+  <main class="p-4 sm:p-6">
+    <section
+      class="mx-auto grid max-w-6xl grid-cols-1 gap-3 overflow-hidden rounded-xl sm:grid-cols-2 sm:items-stretch sm:gap-4"
+    >
+      <div
+        class="panel-foto foto-intro aspect-[4/3] w-full sm:aspect-auto sm:h-full"
+        role="img"
+        aria-label="Animación de bienvenida a la página de Digipets"
+      ></div>
+
+      <div class="panel-intro">
+        <h2 class="mb-3 text-lg sm:text-xl">Sobre el juego</h2>
+
+        <p>
+          ¿Siempre has soñado con tener una pequeña mascota virtual a la que mimar? Con este juego,
+          que es una simulación de Tamagotchi, tienes la oportunidad de hacer realidad ese sueño
+          sumergiéndote en una fantástica aventura donde aprenderás a cuidar de tu mascota virtual.
+          Al principio de la partida, elige a tu criatura en la lista desplegable y pulsa
+          <strong>Continuar juego</strong> para empezar.
+        </p>
+
+        <h3 class="text-sm">Aquí tienes a los 3 personajes principales para elegir:</h3>
+        <ul class="mb-2 list-disc space-y-1 pl-5 text-xs sm:text-sm">
+          <li><strong class="text-sky-400">Tayo-Tayo:</strong> Siempre alegre y lleno de sorpresas.</li>
+          <li><strong class="text-sky-400">Roki:</strong> El pequeño aventurero, un poco travieso.</li>
+          <li><strong class="text-sky-400">Minomi:</strong> El más dulce y atento del grupo.</li>
+        </ul>
+
+        <p class="text-xs sm:text-sm">
+          Al inicio de cada partida, sus barras de Salud, Felicidad, Limpieza y Energía se llenan de
+          forma aleatoria (con una puntuación entre 1 y 10). Cada partida es una sorpresa
+        </p>
+
+        <h2 class="text-sm sm:text-base">⏱️ El tiempo vuela (Cada 5 segundos)</h2>
+        <p class="text-xs sm:text-sm">
+          El tiempo pasa rápido Cada <strong>5 segundos</strong>, tu mascota virtual perderá
+          automáticamente 1 punto en todas sus barras. ¡No le quites un ojo de encima!
+        </p>
+
+        <h3 class="text-sm">🎮 Tus Acciones (Botones)</h3>
+        <p class="text-xs sm:text-sm">
+          Para cuidar de ella, dispones de 6 botones. Ten en cuenta que ninguna barra puede superar
+          la puntuación máxima de 10:
+        </p>
+
+        <ul class="mb-2 list-none space-y-1 pl-0 text-xs sm:text-sm">
+          <li><strong class="text-orange-400">Alimentar:</strong> +3 Energía | +2 Felicidad | −1 Limpieza</li>
+          <li><strong class="text-orange-400">Jugar:</strong> +2 Felicidad | −2 Energía | −2 Limpieza</li>
+          <li><strong class="text-orange-400">Dormir:</strong> +5 Energía | +2 Salud</li>
+          <li><strong class="text-orange-400">Duchar:</strong> +3 Salud | Limpieza al máximo (10)</li>
+          <li><strong class="text-orange-400">Reprender:</strong> −3 Felicidad | −2 Salud</li>
+          <li><strong class="text-orange-400">Acariciar:</strong> +4 Felicidad</li>
+        </ul>
+
+        <p class="text-xs sm:text-sm">
+          <strong>💡 Consejo de entrenamiento:</strong> Utiliza el botón
+          <strong class="text-orange-400">Reprender</strong> si tu criatura no obedece o hace travesuras,
+          pero vigila bien sus barras para no debilitarla demasiado.
+        </p>
+
+        <h2 class="text-sm sm:text-base">💀 Fin de la partida</h2>
+        <p class="text-xs sm:text-sm">
+          Si la Salud <strong>y</strong> la Energía caen ambas a 0, tu compañero se dormirá para siempre.
+          El temporizador se detiene, los botones dejan de funcionar y la partida habrá terminado.
+          ¿Cuánto tiempo lograrás mantenerlo en forma? ¡A jugar!
+        </p>
+
+        <a
+          href="juego.html"
+          class="btn btn-xs sm:btn-sm mt-4 bg-orange-500 font-bold text-white no-underline hover:bg-orange-600"
+        >
+          Empezar a jugar
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie-proyecto mx-4 mb-4 sm:mx-6">
+    <span class="text-white/90">Proyecto Tamagotchi</span>
+    <span class="mx-1.5 text-white/35">—</span>
+    <span class="font-semibold text-sky-400">Digipets</span>
+  </footer>
+
+</body>
+
+</html>

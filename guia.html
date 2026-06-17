@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide UF1844 — Tamagotchi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap"
+    rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    @import "tailwindcss";
+
+    @theme {
+      --font-sans: "Inclusive Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    @layer base {
+      body {
+        @apply min-h-screen bg-slate-950 text-slate-100;
+      }
+
+      h1, h2, h3 {
+        @apply font-bold text-sky-400;
+      }
+
+      p, li {
+        @apply leading-relaxed text-slate-200;
+      }
+
+      section {
+        @apply rounded-xl border border-slate-700 bg-slate-900/80 p-4 sm:p-6;
+      }
+
+      table {
+        @apply w-full border-collapse text-sm;
+      }
+
+      th, td {
+        @apply border border-slate-600 px-3 py-2 text-left;
+      }
+
+      th {
+        @apply bg-slate-800 font-semibold text-sky-300;
+      }
+
+      .ok {
+        @apply font-semibold text-emerald-400;
+      }
+
+      .aviso {
+        @apply font-semibold text-amber-400;
+      }
+    }
+  </style>
+</head>
+
+<body class="p-4 sm:p-8">
+  <main class="mx-auto flex max-w-4xl flex-col gap-6">
+
+    <header class="text-center">
+      <h1 class="mb-2 text-2xl sm:text-3xl">Guide personnel — Projet UF1844</h1>
+      <p class="text-slate-400">Jugar con varios Tamagotchis · Notes pour comprendre et vérifier l'exercice</p>
+    </header>
+
+  <!-- 1. Idée générale -->
+    <section>
+      <h2 class="mb-3 text-xl">1. De quoi parle l'exercice ?</h2>
+      <p>
+        Tu dois créer un <strong>jeu de Tamagotchi</strong> sur une page web. L'utilisateur choisit un personnage
+        dans une liste, puis prend soin de lui avec des boutons. Ses statistiques baissent automatiquement
+        toutes les 5 secondes. Si la <strong>santé</strong> et l'<strong>énergie</strong> tombent toutes les deux
+        à 0, le personnage meurt et la partie s'arrête.
+      </p>
+      <p class="mt-2">
+        Fichiers obligatoires : <strong>1 HTML</strong> + <strong>3 JavaScript</strong>
+        (classe, données, logique du jeu). Toutes les fonctions de la logique doivent être des
+        <strong>arrow functions</strong>.
+      </p>
+    </section>
+
+  <!-- 2. Sélecteur scalable -->
+    <section>
+      <h2 class="mb-3 text-xl">2. Sélecteur « scalable » (2 points — le plus important)</h2>
+      <p>
+        <strong>Ce que ça veut dire :</strong> si tu ajoutes un 4ᵉ personnage dans le fichier de données
+        (<code class="text-orange-300">datos-tamagotchi.js</code>), il doit apparaître <strong>tout seul</strong>
+        dans le menu déroulant, <strong>sans modifier</strong> le reste du programme.
+      </p>
+      <p class="mt-2">
+        <strong>Comment on le fait :</strong> une boucle <code class="text-orange-300">for</code> parcourt le tableau
+        <code class="text-orange-300">tamagotchis</code> et ajoute chaque nom au <code class="text-orange-300">&lt;select id="seleccionar"&gt;</code>.
+      </p>
+      <p class="mt-2 ok">
+        ✓ Dans ton projet : fait dans <code>js/app.js</code> (lignes 36–38).
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs text-slate-300">for (let i = 0; i &lt; tamagotchis.length; i++) {
+  SELECCIONAR.innerHTML += `&lt;option&gt;${tamagotchis[i].nombre}&lt;/option&gt;`;
+}</pre>
+      <p class="mt-2 text-sm text-slate-400">
+        Test : ajoute un objet dans <code>personajes</code> → il doit apparaître dans le select sans toucher à <code>app.js</code>.
+      </p>
+    </section>
+
+  <!-- 3. Affichage pendant la partie -->
+    <section>
+      <h2 class="mb-3 text-xl">3. Ce qui doit s'afficher pendant la partie</h2>
+      <p>L'énoncé demande d'afficher :</p>
+      <ol class="mt-2 list-decimal space-y-1 pl-6">
+        <li>Le <strong>nom</strong></li>
+        <li>L'<strong>image</strong></li>
+        <li>La <strong>description</strong></li>
+        <li>Les <strong>4 barres de vie</strong> : Felicidad, Salud, Limpieza, Energía (valeurs 0–10)</li>
+      </ol>
+      <p class="mt-3">
+        L'énoncé ne impose pas un ordre visuel précis. Il suffit que tout soit visible et se mette à jour
+        à chaque changement.
+      </p>
+      <p class="mt-2 aviso">
+        ⚠ Ordre actuel dans <code>juego.html</code> : d'abord les 4 barres (SVG), puis nom → image → description.
+        C'est valide. Si tu préfères l'ordre « nom, image, description, barres », il faudrait inverser les blocs HTML.
+      </p>
+      <p class="mt-2 ok">
+        ✓ Tout est affiché et mis à jour par <code>actualizarPantalla()</code> dans <code>app.js</code>.
+      </p>
+    </section>
+
+  <!-- 4. Stats initiales -->
+    <section>
+      <h2 class="mb-3 text-xl">4. Valeurs au départ et pendant le jeu</h2>
+      <ul class="list-disc space-y-1 pl-6">
+        <li>À la <strong>création</strong> : chaque stat reçoit une valeur <strong>aléatoire entre 1 et 10</strong>.</li>
+        <li>Pendant le jeu : les valeurs restent toujours entre <strong>0 et 10</strong> (ni plus, ni moins).</li>
+        <li>L'écran se met à jour à chaque action et toutes les 5 secondes.</li>
+      </ul>
+      <p class="mt-2 ok">✓ Fait dans <code>clase-tamagotchi.js</code> (constructeur + <code>cambiaValor</code>).</p>
+    </section>
+
+  <!-- 5. Les 6 boutons -->
+    <section>
+      <h2 class="mb-3 text-xl">5. Les 6 boutons et leurs effets</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bouton</th>
+            <th>Effet (comme l'énoncé)</th>
+            <th>Ton code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alimentar</td>
+            <td>+3 énergie, +2 bonheur, −1 propreté</td>
+            <td class="ok">✓</td>
+          </tr>
+          <tr>
+            <td>Jugar</td>
+            <td>+2 bonheur, −2 énergie, −2 propreté</td>
+            <td class="ok">✓</td>
+          </tr>
+          <tr>
+            <td>Dormir</td>
+            <td>+5 énergie, +2 santé</td>
+            <td class="ok">✓</td>
+          </tr>
+          <tr>
+            <td>Duchar</td>
+            <td>+3 santé, propreté = 10</td>
+            <td class="ok">✓</td>
+          </tr>
+          <tr>
+            <td>Reprender</td>
+            <td>−3 bonheur, −2 santé</td>
+            <td class="ok">✓</td>
+          </tr>
+          <tr>
+            <td>Acariciar</td>
+            <td>+4 bonheur</td>
+            <td class="ok">✓</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mt-3 text-sm text-slate-400">
+        Ordre des boutons dans <code>juego.html</code> : Alimentar, Jugar, Duchar, Acariciar, Dormir, Reprender.
+        L'énoncé ne impose pas cet ordre — seulement que les 6 existent.
+      </p>
+    </section>
+
+  <!-- 6. Timer -->
+    <section>
+      <h2 class="mb-3 text-xl">6. Le timer (toutes les 5 secondes)</h2>
+      <p>
+        Toutes les <strong>5 secondes</strong>, la méthode <code>restarVida()</code> enlève 1 point à
+        <strong>chaque</strong> stat (bonheur, santé, propreté, énergie), puis l'écran se met à jour.
+      </p>
+      <p class="mt-2 ok">✓ Fait avec <code>setInterval(..., 5000)</code> dans <code>iniciarTimer()</code>.</p>
+    </section>
+
+  <!-- 7. Mort et Game Over -->
+    <section>
+      <h2 class="mb-3 text-xl">7. La mort (Game Over)</h2>
+      <p><strong>Condition de mort :</strong> <code>salud === 0</code> <strong>ET</strong> <code>energia === 0</code> en même temps.</p>
+      <p class="mt-2"><strong>Quand ça arrive, il faut :</strong></p>
+      <ul class="mt-2 list-disc space-y-1 pl-6">
+        <li>Arrêter le timer → <code>clearInterval(temporizador)</code></li>
+        <li>Enlever les écouteurs des boutons → <code>quitarEscuchas()</code></li>
+        <li>Le jeu est fini (boutons désactivés + message Game Over)</li>
+      </ul>
+      <p class="mt-2 ok">✓ Tout cela est dans <code>finPartida()</code> et <code>comprobarVida()</code>.</p>
+    </section>
+
+  <!-- 8. Structure des fichiers -->
+    <section>
+      <h2 class="mb-3 text-xl">8. Structure des 4 fichiers</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Fichier</th>
+            <th>Rôle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>juego.html</code></td>
+            <td>Page du jeu : select, bouton Continuar, stats, image, 6 boutons d'action</td>
+          </tr>
+          <tr>
+            <td><code>js/clase-tamagotchi.js</code></td>
+            <td>Classe Tamagotchi : attributs publics/privés, 6 méthodes, restarVida, comprobarVida</td>
+          </tr>
+          <tr>
+            <td><code>js/datos-tamagotchi.js</code></td>
+            <td>Tableau <code>personajes</code> + création du tableau <code>tamagotchis</code></td>
+          </tr>
+          <tr>
+            <td><code>js/app.js</code></td>
+            <td>Logique : mapeo HTML, sélection, timer, listeners, mise à jour écran (arrow functions)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mt-3 text-sm text-slate-400">
+        <code>index.html</code> et <code>guia.html</code> sont des extras pour toi, pas demandés par l'énoncé.
+      </p>
+    </section>
+
+  <!-- 9. Classe Tamagotchi -->
+    <section>
+      <h2 class="mb-3 text-xl">9. La classe Tamagotchi (détail)</h2>
+      <p><strong>Publics :</strong> nombre, descripcion, imagen</p>
+      <p><strong>Privés :</strong> felicidad, salud, limpieza, energia, enVida (commence à true)</p>
+      <p class="mt-2">
+        Chaque interaction appelle <code>comprobarVida()</code> à la fin pour vérifier si le personnage est encore vivant.
+      </p>
+      <p class="mt-2 ok">✓ Ta classe dans <code>clase-tamagotchi.js</code> respecte l'énoncé.</p>
+      <p class="mt-1 text-sm text-slate-400">
+        Extra (non demandé) : <code>videoSaludo</code> et <code>videos</code> pour les animations.
+      </p>
+    </section>
+
+  <!-- 10. Barème -->
+    <section>
+      <h2 class="mb-3 text-xl">10. Barème de la profe (10 points)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Critère</th>
+            <th>Pts</th>
+            <th>État projet</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Responsive</td><td>1</td><td class="ok">✓ Tailwind + grille adaptative</td></tr>
+          <tr><td>Bonnes pratiques (DRY)</td><td>1</td><td class="ok">✓ Boucles, tableaux de config</td></tr>
+          <tr><td>Classe Tamagotchi</td><td>1</td><td class="ok">✓</td></tr>
+          <tr><td>Objets et tableau</td><td>1</td><td class="ok">✓</td></tr>
+          <tr><td>Sélecteur scalable</td><td>2</td><td class="ok">✓ for sur tamagotchis</td></tr>
+          <tr><td>Processus de sélection</td><td>1</td><td class="ok">✓ select + Continuar</td></tr>
+          <tr><td>Mapeo HTML</td><td>1</td><td class="ok">✓ getElementById en haut de app.js</td></tr>
+          <tr><td>Event listeners (+ retrait)</td><td>1</td><td class="ok">✓ add + removeEventListener</td></tr>
+          <tr><td>Timer (start + stop)</td><td>1</td><td class="ok">✓ setInterval + clearInterval</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  <!-- 11. Checklist -->
+    <section>
+      <h2 class="mb-3 text-xl">11. Checklist pas à pas (à cocher avant de rendre)</h2>
+      <ol class="list-decimal space-y-3 pl-6">
+        <li>
+          <strong>Ouvrir <code>juego.html</code></strong> dans le navigateur (pas seulement index.html).
+        </li>
+        <li>
+          <strong>Sélection :</strong> le <code>&lt;select id="seleccionar"&gt;</code> montre les 3 personnages.
+        </li>
+        <li>
+          <strong>Scalable :</strong> ajouter un 4ᵉ dans <code>datos-tamagotchi.js</code> → il apparaît dans le select sans toucher <code>app.js</code>.
+        </li>
+        <li>
+          <strong>Continuar :</strong> cliquer démarre la partie, cache la sélection, montre le jeu.
+        </li>
+        <li>
+          <strong>Affichage :</strong> nom, image, description et 4 stats visibles.
+        </li>
+        <li>
+          <strong>Stats initiales :</strong> valeurs entre 1 et 10 (pas toutes à 0).
+        </li>
+        <li>
+          <strong>Chaque bouton :</strong> tester les 6 et vérifier que les stats changent comme le tableau ci-dessus.
+        </li>
+        <li>
+          <strong>Timer :</strong> attendre 5 s sans cliquer → toutes les stats perdent 1 point.
+        </li>
+        <li>
+          <strong>Mort :</strong> faire descendre salud ET energia à 0 → Game Over, timer arrêté, boutons inactifs.
+        </li>
+        <li>
+          <strong>Listeners :</strong> après la mort, cliquer sur un bouton d'action ne doit rien faire.
+        </li>
+        <li>
+          <strong>Fichiers :</strong> 1 HTML (<code>juego.html</code>) + 3 JS avec scripts en <code>defer</code> dans le bon ordre.
+        </li>
+        <li>
+          <strong>Arrow functions :</strong> toutes les fonctions dans <code>app.js</code> utilisent <code>const nom = () =&gt;</code>.
+        </li>
+        <li>
+          <strong>Responsive :</strong> réduire la fenêtre → la mise en page reste lisible (mobile).
+        </li>
+        <li>
+          <strong>Console :</strong> F12 → pas d'erreurs rouges au chargement ni en jouant.
+        </li>
+      </ol>
+    </section>
+
+  <!-- 12. index.html -->
+    <section>
+      <h2 class="mb-3 text-xl">12. Ton <code>index.html</code> (page d'intro)</h2>
+      <p class="ok">✓ La description des boutons et leurs effets est <strong>correcte</strong>.</p>
+      <p class="ok">✓ Le timer de 5 secondes est bien expliqué.</p>
+      <p class="ok">✓ La mort (salud Y energía a 0) est bien expliquée.</p>
+      <p class="ok">✓ Les stats aléatoires 1–10 au départ sont mentionnées.</p>
+      <p class="mt-3 aviso">Améliorations possibles (optionnel) :</p>
+      <ul class="mt-2 list-disc space-y-1 pl-6 text-sm">
+        <li>Ajouter que le timer <strong>s'arrête</strong> et les boutons <strong>ne fonctionnent plus</strong> à la mort.</li>
+        <li>Mentionner le flux : choisir dans la liste → bouton <strong>Continuar juego</strong>.</li>
+        <li>Utiliser <strong>Duchar</strong> et <strong>Reprender</strong> (noms du jeu) au lieu de Lavar / Regañar.</li>
+        <li>La liste des 3 personnages est écrite à la main : si tu ajoutes un 4ᵉ, il faudra aussi mettre à jour index.html (seulement pour l'intro, pas pour la note).</li>
+      </ul>
+    </section>
+
+    <footer class="text-center text-sm text-slate-500">
+      Guide personnel — pas destiné à être rendu à la profe
+    </footer>
+
+  </main>
+</body>
+
+</html>
