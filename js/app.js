@@ -140,18 +140,23 @@ const reproducirVideoSilenciado = (video) => {                          // repro
 };
 
 const reproducirVideo = (video, ruta) => {                              // cambia el src y reproduce (función independiente)
-  if (ruta) {                                                           // solo si hay vídeo
-    video.muted = false;                                                // primero con sonido
-    video.src = ruta;                                                   // cambia el archivo .webm
-    const intento = video.play();                                       // play() devuelve promesa o undefined
+  if (!ruta) {
+    return;
+  }
 
-    if (intento) {                                                      // si el navegador devuelve promesa
-      const alFallarAutoplay = () => {                                  // plan B si bloquea autoplay con audio
-        reproducirVideoSilenciado(video);                               // reproduce sin sonido
-      };
+  video.pause();
+  video.muted = false;
+  video.src = ruta;
+  video.load();
 
-      intento.catch(alFallarAutoplay);
-    }
+  const intento = video.play();
+
+  if (intento) {
+    const alFallarAutoplay = () => {
+      reproducirVideoSilenciado(video);
+    };
+
+    intento.catch(alFallarAutoplay);
   }
 };
 
